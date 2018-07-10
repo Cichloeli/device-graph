@@ -1,4 +1,7 @@
-d3.tsv("js/test.tsv", function(error, data) {
+// read in distribution data and create chart
+
+// size distribution
+d3.tsv("js/test1.tsv", function(error, data) {
     if(error) throw error;
 
     var ylabel = "Number of Nodes";
@@ -14,7 +17,8 @@ d3.tsv("js/test.tsv", function(error, data) {
     create_chart(data, target, title, ylabel, xlabel);
 });
 
-d3.tsv("js/test.tsv", function(error, data) {
+//density distribution
+d3.tsv("js/test2.tsv", function(error, data) {
     if(error) throw error;
 
     var ylabel = "Number of Nodes";
