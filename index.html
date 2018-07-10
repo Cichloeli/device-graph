@@ -18,9 +18,14 @@
         <link rel="stylesheet" href="css/node.css">
         <link rel="stylesheet" href="css/tooltip.css">
         <link rel="stylesheet" href="css/sidenav.css">
+        <link rel="stylesheet" href="css/line_chart.css">
+        <link rel="stylesheet" href="css/card.css">
 
         <!-- d3 plugin -->
         <script type="text/javascript" src="js/d3.v3.min.js"></script>
+
+        <!-- chart functions -->
+        <script type="text/javascript" src="js/chart.js"></script>
 
     </head>
 
@@ -44,16 +49,27 @@
         <!-- create sidenav -->
         <div class="sidenav" id="mySidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
-                    <div id="distributions"></div>
+                    <div class="card">
+                        <div class="cardInnerMargin">
+                            <div id="size_distributions"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="cardInnerMargin">
+                            <div id="dens_distributions"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- load javascript code -->
-        <script type="text/javascript" src="js/distribution_chart.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/distributions.js"></script>
         <script type="text/javascript" src="js/sidenav.js"></script>
     </body>
 

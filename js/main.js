@@ -62,14 +62,14 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
             hideTooltip();
         });
 
-    svg.append("g").selectAll("text")
-        .data(nodes)
-        .enter().append("text")
-        .attr("class", "label")
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-        .style("fill-opacity", function(d) { return d.parent === root ? 0 : 1; })
-        .style("display", function(d) { return d.parent === root ? null : "none"; })
-        .text(function(d) { return d.index; });
+    // svg.append("g").selectAll("text")
+    //     .data(nodes)
+    //     .enter().append("text")
+    //     .attr("class", "label")
+    //     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    //     .style("fill-opacity", function(d) { return d.parent === root ? 0 : 1; })
+    //     .style("display", function(d) { return d.parent === root ? null : "none"; })
+    //     .text(function(d) { return d.index; });
 
     d3.select(window)
         .on("click", function() { zoom(root); });
@@ -83,18 +83,18 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
         y.domain([d.y - d.r, d.y + d.r]);
         d3.event.stopPropagation();
 
-        var transition = d3.selectAll("text,circle").transition()
+        var transition = d3.selectAll("circle").transition()
             .duration(d3.event.altKey ? 7500 : 750)
             .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
         transition.filter("circle")
             .attr("r", function(d) { return k * d.r; });
 
-    transition.filter("text")
-        .filter(function(d) { return d.parent === focus || d.parent === focus0; })
-        .style("fill-opacity", function(d) { return d.parent === focus ? 0 : 1; })
-        .each("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-        .each("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+    // transition.filter("text")
+    //     .filter(function(d) { return d.parent === focus || d.parent === focus0; })
+    //     .style("fill-opacity", function(d) { return d.parent === focus ? 0 : 1; })
+    //     .each("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+    //     .each("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
     }
 
 });
@@ -122,6 +122,3 @@ function showTooltip(c, node, root){
 function hideTooltip(){
     tooltip.transition().duration(200).style("opacity", 0);
 };
-
-console.log(document.getElementById("distributions").offsetHeight);
-create_distribution();
