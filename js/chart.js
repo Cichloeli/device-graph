@@ -22,6 +22,12 @@ function create_chart(data, target, title, ylabel, xlabel){
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
 
+    // initialize a focus group
+    var focus = svg.append("g") 
+        .style("display", "none");
+
+    var bisectDate = d3.bisector(function(d) { return d.size; }).left;
+
     // Define the line
     var valueline = d3.svg.line()
         .x(function(d) { return x(d.size); })
@@ -71,4 +77,65 @@ function create_chart(data, target, title, ylabel, xlabel){
         .attr("y", -margin.top/2)
         .style("text-anchor", "middle")
         .html(title)
+
+    // create focus line
+    // append the x line
+    focus.append("line")
+        .attr("class", "x")
+        .style("stroke", "blue")
+        .style("stroke-dasharray", "3,3")
+        .style("opacity", 0.5)
+        .attr("y1", 0)
+        .attr("y2", height);
+
+    // append the y line
+    focus.append("line")
+        .attr("class", "y")
+        .style("stroke", "blue")
+        .style("stroke-dasharray", "3,3")
+        .style("opacity", 0.5)
+        .attr("x1", width)
+        .attr("x2", width);
+
+    // append the circle at the intersection
+    focus.append("circle")
+        .attr("class", "y")
+        .style("fill", "none")
+        .style("stroke", "blue")
+        .attr("r", 4);
+
+    // append the rectangle to capture mouse
+    svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mousemove", mousemove);
+
+    function mousemove() {
+        var x0 = x.invert(d3.mouse(this)[0]),
+            i = bisectDate(data, x0, 1),
+            d0 = data[i - 1],
+            d1 = data[i] == undefined ? data[i-1] : data[i],
+            d = x0 - d0.size > d1.size - x0 ? d1 : d0;
+
+        focus.select("circle.y")
+            .attr("transform",
+                  "translate(" + x(d.size) + "," +
+                                 y(d.value) + ")");
+
+        focus.select(".x")
+            .attr("transform",
+                  "translate(" + x(d.size) + "," +
+                                 y(d.value) + ")")
+                       .attr("y2", height - y(d.value));
+
+        focus.select(".y")
+            .attr("transform",
+                  "translate(" + width * -1 + "," +
+                                 y(d.value) + ")")
+                       .attr("x2", width + width);
+    };
 };

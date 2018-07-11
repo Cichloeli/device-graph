@@ -50,11 +50,15 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
     svg.append("g").selectAll("circle")
         .data(nodes)
         .enter().append("circle")
+        .attr("id", "circle_nodes")
         .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
         .attr("r", function(d) { return d.r; })
         .style("fill", function(d) { return density_color(d.color); })
-        .on("click", function(d) { return zoom(focus == d ? root : d); })
+        .on("click", function(d) { 
+            console.log(d);
+            return zoom(focus == d ? root : d); 
+        })
         .on("mouseover", function(d) {
             showTooltip(this,d, root);
         })
@@ -83,7 +87,7 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
         y.domain([d.y - d.r, d.y + d.r]);
         d3.event.stopPropagation();
 
-        var transition = d3.selectAll("circle").transition()
+        var transition = d3.selectAll("#circle_nodes").transition()
             .duration(d3.event.altKey ? 7500 : 750)
             .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
