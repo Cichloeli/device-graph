@@ -41,23 +41,32 @@ function filter(data, size){
     }
 }
 
+var density_ids = {}
+
+d3.json("data_files/density.json", function(error, data){
+    density_ids = data
+});
+
 d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
 
     filter(root, 10);
     var focus = root,
         nodes = pack.nodes(root);
 
+    console.log(density_ids);
     svg.append("g").selectAll("circle")
         .data(nodes)
         .enter().append("circle")
-        .attr("id", "circle_nodes")
+        .attr("id", function(d){
+            return "c" + d.index;
+        })
         .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
         .attr("r", function(d) { return d.r; })
         .style("fill", function(d) { return density_color(d.color); })
         .on("click", function(d) { 
             console.log(d);
-            return zoom(focus == d ? root : d); 
+            // return zoom(focus == d ? root : d); 
         })
         .on("mouseover", function(d) {
             showTooltip(this,d, root);
@@ -87,7 +96,7 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
         y.domain([d.y - d.r, d.y + d.r]);
         d3.event.stopPropagation();
 
-        var transition = d3.selectAll("#circle_nodes").transition()
+        var transition = d3.selectAll(".node", ".node node--leaf", ".node node--root").transition()
             .duration(d3.event.altKey ? 7500 : 750)
             .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
@@ -107,7 +116,7 @@ d3.select(self.frameElement).style("height", outerDiameter + "px");
 
 function showTooltip(c, node, root){
 
-    var density = node.color;
+    var density = density_ids[node.index];
     var size = node.size;
     var index = node.index;
 

@@ -8,7 +8,7 @@
     right: 0;
     background-color: #7386D5;
     overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
+    padding-top: 0px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
     -moz-box-shadow: 4px 4px 12px rgba(0,0,0,.5);
     -webkit-box-shadow: 4px 4px 12px rgba(0,0,0,.5);
@@ -29,7 +29,7 @@
 .sidenav .closebtn {
     position: absolute;
     top: 0;
-    right: 25px;
+    left: 0px;
     font-size: 36px;
-    margin-left: 50px;
+    margin-left: 10px;
 }
