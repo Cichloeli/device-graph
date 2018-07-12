@@ -1,4 +1,5 @@
 #coding:utf-8
+#ignore when their parents are size of 0, 10 and up
 import json
 
 
