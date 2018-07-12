@@ -20,7 +20,7 @@ function create_chart(data, target, title, ylabel, xlabel){
         .orient("bottom").ticks(5);
 
     var yAxis = d3.svg.axis().scale(y)
-        .orient("left").ticks(5);
+        .orient("left");
 
     // initialize a focus group
     var focus = svg.append("g") 
@@ -58,7 +58,7 @@ function create_chart(data, target, title, ylabel, xlabel){
         .style("fill", "grey")
         .attr("transform", "rotate(-90)")
         .attr("x", -height/2)
-        .attr("y", -margin.left/(1.5))
+        .attr("y", -margin.left/(1.2))
         .style("text-anchor", "middle")
         .text(ylabel);
 

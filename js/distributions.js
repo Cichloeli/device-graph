@@ -1,7 +1,41 @@
 // read in distribution data and create chart
 
+var SIZEINPUT = "data_files/SizeDistribution.tsv";
+var DENSINPUT = "data_files/SizeDistribution.tsv";
+
+// create charts for home tag
+function updateHomeTab(){
+
+    // if there are existing charts delete them
+    var old = document.getElementById("tab_charts");
+    if(old != null) removeElement("tab_charts");
+
+    // create chart location
+    var html = '<div class="row">' +
+                    '<div class="card">' +
+                        '<div class="cardInnerMargin">' +
+                            '<div id="size_distributions"></div>'+
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                    '<div class="card">' +
+                        '<div class="cardInnerMargin">' +
+                            '<div id="dens_distributions"></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+    // create the charts
+    d3.tsv(SIZEINPUT, loadSize);
+    d3.tsv(SIZEINPUT, loadDens);
+
+    // append the charts to html
+    addElement("home", "div", "container-fluid", "tab_charts", html)
+}
+
 // size distribution
-d3.tsv("js/test1.tsv", function(error, data) {
+function loadSize(error, data) {
     if(error) throw error;
 
     var ylabel = "Number of Nodes";
@@ -15,10 +49,10 @@ d3.tsv("js/test1.tsv", function(error, data) {
     });
 
     create_chart(data, target, title, ylabel, xlabel);
-});
+};
 
 //density distribution
-d3.tsv("js/test2.tsv", function(error, data) {
+function loadDens(error, data) {
     if(error) throw error;
 
     var ylabel = "Number of Nodes";
@@ -32,4 +66,4 @@ d3.tsv("js/test2.tsv", function(error, data) {
     });
 
     create_chart(data, target, title, ylabel, xlabel);
-});
+};
