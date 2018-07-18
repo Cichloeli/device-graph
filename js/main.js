@@ -24,7 +24,7 @@ var svg = d3.select("#circle_pack").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin + "," + margin + ")");
 
-var tooltip = d3.select("#circle_pack").append("div")   
+var circle_tooltip = d3.select("#circle_pack").append("div")   
     .attr("class", "tooltip")               
     .style("opacity", 0);
 
@@ -41,19 +41,12 @@ function filter(data, size){
     }
 }
 
-var density_ids = {}
-
-d3.json("data_files/density.json", function(error, data){
-    density_ids = data
-});
-
-d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
+d3.json("graphOmahaIndexed_23_circle.json", function(error, root) {
 
     filter(root, 10);
     var focus = root,
         nodes = pack.nodes(root);
 
-    console.log(density_ids);
     svg.append("g").selectAll("circle")
         .data(nodes)
         .enter().append("circle")
@@ -65,11 +58,12 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
         .attr("r", function(d) { return d.r; })
         .style("fill", function(d) { return density_color(d.color); })
         .on("click", function(d) { 
-            console.log(d);
+            selected(d);
+            loadNodeData(d.index);
             // return zoom(focus == d ? root : d); 
         })
         .on("mouseover", function(d) {
-            showTooltip(this,d, root);
+            showTooltip(this,d);
         })
         .on("mouseout", function(d){
             hideTooltip();
@@ -110,28 +104,38 @@ d3.json("graphOmahaIndexed.mtx_23_circle.json", function(error, root) {
     //     .each("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
     }
 
+    function selected(d){
+        var selected = d;
+        d3.selectAll(".node", ".node node--leaf").filter(function(d) {return ( (d.parent !== selected && d !== selected)); })
+            .style("stroke-width", 0);
+        d3.selectAll(".node", ".node node--leaf").filter(function(d) {return ( d === selected ); })
+            .style("stroke", "white")
+            .style("stroke-width", 4);
+    };
+
 });
 
 d3.select(self.frameElement).style("height", outerDiameter + "px");
 
-function showTooltip(c, node, root){
-
-    var density = density_ids[node.index];
+function showTooltip(c, node){
+    var density = node.density;
     var size = node.size;
     var index = node.index;
+    var k_value = node.k_value;
 
     var matrix = c.getScreenCTM()
         .translate(+c.getAttribute("cx"),+c.getAttribute("cy"));
-    tooltip.transition().duration(200).style("opacity", .9);
+    circle_tooltip.transition().duration(200).style("opacity", .9);
     var x = window.pageXOffset + matrix.e;
     var y = window.pageYOffset + matrix.f;
-    tooltip.html("</p><p class='center-align'>Name: " + index +
+    circle_tooltip.html("</p><p class='center-align'>Name: " + index +
                  "</p><p class='left-align'>Size:<span class='right-align'>" + size +
-                 "</p><p class='left-align'>density:<span class='right-align'>" + density)
+                 "</p><p class='left-align'>Density:<span class='right-align'>" + density +
+                 "</p><p class='left-align'>K-value:<span class='right-align'>" + k_value)
         .style("left", x + "px")     
         .style("top", y + "px");
 };
 
 function hideTooltip(){
-    tooltip.transition().duration(200).style("opacity", 0);
+    circle_tooltip.transition().duration(200).style("opacity", 0);
 };

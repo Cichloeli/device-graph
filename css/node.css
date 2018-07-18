@@ -3,13 +3,13 @@
 }
 
 .node:hover {
-  stroke: #000;
-  stroke-width: 1.5px;
+  stroke: #fff !important;
+  stroke-width: 4px !important;
 }
 
 .node--root {
-  stroke: #777;
-  stroke-width: 2px;
+  stroke: #777 !important;
+  stroke-width: 2px !important;
 }
 
 .node--leaf {

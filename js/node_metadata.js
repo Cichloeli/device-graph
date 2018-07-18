@@ -1,7 +1,7 @@
 function updateNodeTab(){
     // if there are existing charts delete them
-    var old = document.getElementById("tab_charts");
-    if(old != null) removeElement("tab_charts");
+    var old = document.getElementById("tab_info");
+    if(old != null) removeElement("tab_info");
 
     // create chart location
     var html = '<div class="row">' +
@@ -15,5 +15,21 @@ function updateNodeTab(){
                 '</div>';
 
     // append the charts to html
-    addElement("node", "div", "container-fluid", "tab_charts", html);
+    addElement("node", "div", "container-fluid", "tab_info", html);
+};
+
+function loadNodeData(index){
+    var path = "data_files/nodes/" + index + ".json"
+    d3.json(path, function(error, data){
+        if(error) throw error;
+        
+        var array_length = data[index].length;
+        var html = ""
+        for(var i = 0; i<array_length; i++){
+            html += data[index][i] + '<br/>'
+        };
+
+        document.getElementById("node_metadata").innerHTML = html;
+
+    });
 };

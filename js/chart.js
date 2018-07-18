@@ -1,7 +1,7 @@
 function create_chart(data, target, title, ylabel, xlabel){
     // declare margins
     // declar width and height with padding
-    var margin = {top: 40, right: 20, bottom: 50, left: 60},
+    var margin = {top: 50, right: 20, bottom: 50, left: 60},
         width = screen.width/4.2 - margin.left - margin.right,
         height = screen.height/3 - margin.top - margin.bottom;
 
@@ -10,7 +10,6 @@ function create_chart(data, target, title, ylabel, xlabel){
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     // Set the ranges
     var x = d3.scale.linear().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
@@ -74,7 +73,7 @@ function create_chart(data, target, title, ylabel, xlabel){
     svg.append("text")
         .style("fill", "grey")
         .attr("x", width/2)
-        .attr("y", -margin.top/2)
+        .attr("y", -margin.top/1.5)
         .style("text-anchor", "middle")
         .html(title)
 
@@ -103,6 +102,32 @@ function create_chart(data, target, title, ylabel, xlabel){
         .style("fill", "none")
         .style("stroke", "blue")
         .attr("r", 4);
+
+    // place the value at the intersection
+    focus.append("text")
+        .attr("class", "y1")
+        .style("stroke", "white")
+        .style("stroke-width", "3.5px")
+        .style("opacity", 1)
+        .attr("dx", 6)
+        .attr("dy", "-1.5em");
+    focus.append("text")
+        .attr("class", "y2")
+        .attr("dx", 6)
+        .attr("dy", "-1.5em");
+
+    // place the date at the intersection
+    focus.append("text")
+        .attr("class", "y3")
+        .style("stroke", "white")
+        .style("stroke-width", "3.5px")
+        .style("opacity", 1)
+        .attr("dx", 6)
+        .attr("dy", "-0.5em");
+    focus.append("text")
+        .attr("class", "y4")
+        .attr("dx", 6)
+        .attr("dy", "-0.5em");
 
     // append the rectangle to capture mouse
     svg.append("rect")
@@ -137,5 +162,30 @@ function create_chart(data, target, title, ylabel, xlabel){
                   "translate(" + width * -1 + "," +
                                  y(d.value) + ")")
                        .attr("x2", width + width);
+
+        focus.select("text.y1")
+            .attr("transform",
+                  "translate(" + x(d.size) + "," +
+                                 y(d.value) + ")")
+            .text(d.value);
+
+        focus.select("text.y2")
+            .attr("transform",
+                  "translate(" + x(d.size) + "," +
+                                 y(d.value) + ")")
+            .text(d.value);
+
+        focus.select("text.y3")
+            .attr("transform",
+                  "translate(" + x(d.size) + "," +
+                                 y(d.value) + ")")
+            .text(d.size);
+
+        focus.select("text.y4")
+            .attr("transform",
+                  "translate(" + x(d.size) + "," +
+                                 y(d.value) + ")")
+            .text(d.size);
+        //var c = focus.select("circle.y")[0][0];
     };
 };
