@@ -10,7 +10,15 @@ function updateHomeTab(){
     if(old != null) removeElement("tab_info");
 
     // create chart location
-    var html = '<div class="row">' +
+    var html =
+                '<div class="row">' +
+                    '<div class="card">' +
+                        '<div class="cardInnerMargin">' +
+                            '<div id="dens_legend"></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="row">' +
                     '<div class="card">' +
                         '<div class="cardInnerMargin">' +
                             '<div id="size_distributions"></div>'+
@@ -25,12 +33,14 @@ function updateHomeTab(){
                     '</div>' +
                 '</div>';
 
+    // append the charts to html
+    addElement("home", "div", "container-fluid", "tab_info", html);
+
+    create_legend("#dens_legend");
+
     // create the charts
     loadSize();
     loadDens();
-
-    // append the charts to html
-    addElement("home", "div", "container-fluid", "tab_info", html)
 }
 
 // size distribution
@@ -43,13 +53,13 @@ function loadSize() {
     }, function(error, data){
         if(error) throw error;
 
-        var ylabel = "Number of Nodes";
-        var xlabel = "Number of Devices";
-        var title  = "Number of Nodes with &#8804 X Devices";
-        var target = "#size_distributions";
+        var ylabel = "Number of Nodes",
+            xlabel = "Devices",
+            title  = "Number of Nodes with &#8804 X Devices",
+            target = "#size_distributions";
 
-        var largest = d3.max(data, function(d){return d.value;}).toString()
-        var zeros   = Math.pow(10,(largest.length - 2))
+        var largest = d3.max(data, function(d){return d.value;}).toString(),
+            zeros   = Math.pow(10,(largest.length - 2))
 
         if(largest.length > 4){
             data.forEach(function(d){
@@ -57,8 +67,8 @@ function loadSize() {
             });
 
             var zeros = zeros.toString();
-            var zeros  = zeros.slice(0, zeros.length - 3) + "," + zeros.slice(-3);
-            var ylabel = ylabel + " in " + zeros.toString();
+            zeros  = zeros.slice(0, zeros.length - 3) + "," + zeros.slice(-3);
+            ylabel = ylabel + " in " + zeros.toString();
         };
 
         create_chart(data, target, title, ylabel, xlabel);
@@ -75,13 +85,13 @@ function loadDens(){
     }, function(error, data){
         if(error) throw error;
 
-        var ylabel = "Number of Nodes";
-        var xlabel = "Density";
-        var title  = "Number of Nodes with Density &#8804 X";
-        var target = "#dens_distributions";
+        var ylabel = "Number of Nodes",
+            xlabel = "Density",
+            title  = "Number of Nodes with Density &#8804 X",
+            target = "#dens_distributions";
 
-        var largest = d3.max(data, function(d){return d.value;}).toString()
-        var zeros   = Math.pow(10,(largest.length - 2))
+        var largest = d3.max(data, function(d){return d.value;}).toString(),
+            zeros   = Math.pow(10,(largest.length - 2))
 
         if(largest.length > 4){
             data.forEach(function(d){
@@ -89,8 +99,8 @@ function loadDens(){
             });
 
             var zeros = zeros.toString();
-            var zeros  = zeros.slice(0, zeros.length - 3) + "," + zeros.slice(-3);
-            var ylabel = ylabel + " in " + zeros.toString();
+            zeros  = zeros.slice(0, zeros.length - 3) + "," + zeros.slice(-3);
+            ylabel = ylabel + " in " + zeros.toString();
         };
 
         create_chart(data, target, title, ylabel, xlabel);

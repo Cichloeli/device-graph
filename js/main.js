@@ -63,10 +63,10 @@ d3.json("graphOmahaIndexed_23_circle.json", function(error, root) {
             // return zoom(focus == d ? root : d); 
         })
         .on("mouseover", function(d) {
-            showTooltip(this,d);
+            showCircleTooltip(this,d);
         })
         .on("mouseout", function(d){
-            hideTooltip();
+            hideCircleTooltip();
         });
 
     // svg.append("g").selectAll("text")
@@ -112,22 +112,21 @@ d3.json("graphOmahaIndexed_23_circle.json", function(error, root) {
             .style("stroke", "white")
             .style("stroke-width", 4);
     };
-
 });
 
 d3.select(self.frameElement).style("height", outerDiameter + "px");
 
-function showTooltip(c, node){
+function showCircleTooltip(c, node){
     var density = node.density;
     var size = node.size;
     var index = node.index;
     var k_value = node.k_value;
 
-    var matrix = c.getScreenCTM()
-        .translate(+c.getAttribute("cx"),+c.getAttribute("cy"));
+    var matrix = c.getScreenCTM();
     circle_tooltip.transition().duration(200).style("opacity", .9);
-    var x = window.pageXOffset + matrix.e;
-    var y = window.pageYOffset + matrix.f;
+    var x = matrix.e;
+    var y = matrix.f;
+
     circle_tooltip.html("</p><p class='center-align'>Name: " + index +
                  "</p><p class='left-align'>Size:<span class='right-align'>" + size +
                  "</p><p class='left-align'>Density:<span class='right-align'>" + density +
@@ -136,6 +135,6 @@ function showTooltip(c, node){
         .style("top", y + "px");
 };
 
-function hideTooltip(){
+function hideCircleTooltip(){
     circle_tooltip.transition().duration(200).style("opacity", 0);
 };

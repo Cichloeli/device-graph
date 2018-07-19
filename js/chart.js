@@ -1,15 +1,24 @@
 function create_chart(data, target, title, ylabel, xlabel){
     // declare margins
-    // declar width and height with padding
+    // declare width and height with padding
     var margin = {top: 50, right: 20, bottom: 50, left: 60},
-        width = screen.width/4.2 - margin.left - margin.right,
+        parent_width = $(target).parent().width();
+        width = parent_width - margin.left - margin.right,
         height = screen.height/3 - margin.top - margin.bottom;
 
     // create svg object and translate to be contained in margins
     var svg = d3.select(target).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-        .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .on("mouseout", function(d){
+            hideGraphTooltip();
+        });
+
+    var graph_tooltip = d3.select(target).append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
+
     // Set the ranges
     var x = d3.scale.linear().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
@@ -103,32 +112,6 @@ function create_chart(data, target, title, ylabel, xlabel){
         .style("stroke", "blue")
         .attr("r", 4);
 
-    // place the value at the intersection
-    focus.append("text")
-        .attr("class", "y1")
-        .style("stroke", "white")
-        .style("stroke-width", "3.5px")
-        .style("opacity", 1)
-        .attr("dx", 6)
-        .attr("dy", "-1.5em");
-    focus.append("text")
-        .attr("class", "y2")
-        .attr("dx", 6)
-        .attr("dy", "-1.5em");
-
-    // place the date at the intersection
-    focus.append("text")
-        .attr("class", "y3")
-        .style("stroke", "white")
-        .style("stroke-width", "3.5px")
-        .style("opacity", 1)
-        .attr("dx", 6)
-        .attr("dy", "-0.5em");
-    focus.append("text")
-        .attr("class", "y4")
-        .attr("dx", 6)
-        .attr("dy", "-0.5em");
-
     // append the rectangle to capture mouse
     svg.append("rect")
         .attr("width", width)
@@ -163,29 +146,33 @@ function create_chart(data, target, title, ylabel, xlabel){
                                  y(d.value) + ")")
                        .attr("x2", width + width);
 
-        focus.select("text.y1")
-            .attr("transform",
-                  "translate(" + x(d.size) + "," +
-                                 y(d.value) + ")")
-            .text(d.value);
+        var c = focus.select("circle.y")[0][0];
+        showGraphTooltip(c, d);
+    };
 
-        focus.select("text.y2")
-            .attr("transform",
-                  "translate(" + x(d.size) + "," +
-                                 y(d.value) + ")")
-            .text(d.value);
+    function showGraphTooltip(c, d){
+        var size  = d.size,
+            value = d.value,
+            bot_margin = 20;
 
-        focus.select("text.y3")
-            .attr("transform",
-                  "translate(" + x(d.size) + "," +
-                                 y(d.value) + ")")
-            .text(d.size);
+        var parent_coord = $(target).position(),
+            parent_x     = parent_coord["left"],
+            parent_y     = parent_coord["top"];
 
-        focus.select("text.y4")
-            .attr("transform",
-                  "translate(" + x(d.size) + "," +
-                                 y(d.value) + ")")
-            .text(d.size);
-        //var c = focus.select("circle.y")[0][0];
+        graph_tooltip.transition().duration(200).style("opacity", .9);
+
+        var t  = d3.transform(d3.select(c).attr("transform")),
+            x = t.translate[0] + parent_x,
+            y = t.translate[1] + parent_y - bot_margin;
+
+        graph_tooltip.html(
+                     "</p><p class='left-align'>"+ xlabel +":<span class='right-align'>" + size +
+                     "</p><p class='left-align'>Nodes:<span class='right-align'>" + value)
+            .style("left", x + "px")     
+            .style("top", y + "px");
+    };
+
+    function hideGraphTooltip(){
+        graph_tooltip.transition().duration(200).style("opacity", 0);
     };
 };
