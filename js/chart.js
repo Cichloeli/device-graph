@@ -155,16 +155,26 @@ function create_chart(data, target, title, ylabel, xlabel){
             value = d.value,
             bot_margin = 20;
 
+        // get the coordinates of the parent html object
         var parent_coord = $(target).position(),
             parent_x     = parent_coord["left"],
             parent_y     = parent_coord["top"];
 
+        // get scroll offset
+        var yOffset = $("#mySidenav").scrollTop(),
+            xOffset = $("#mySidenav").scrollLeft();
+
+        console.log($(target).scrollLeft(),$(target).scrollTop());
+        // create tooltip transition
         graph_tooltip.transition().duration(200).style("opacity", .9);
 
+        console.log(yOffset, xOffset);
+        // calculate coordinates for tooltip
         var t  = d3.transform(d3.select(c).attr("transform")),
-            x = t.translate[0] + parent_x,
-            y = t.translate[1] + parent_y - bot_margin;
+            x = t.translate[0] + parent_x + xOffset,
+            y = t.translate[1] + parent_y + yOffset - bot_margin;
 
+        // add text to tooltip and position it
         graph_tooltip.html(
                      "</p><p class='left-align'>"+ xlabel +":<span class='right-align'>" + size +
                      "</p><p class='left-align'>Nodes:<span class='right-align'>" + value)
