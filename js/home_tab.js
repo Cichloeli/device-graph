@@ -1,6 +1,7 @@
 // read in distribution data and create chart
 var SIZEFILE = "data_files/SizeDistribution.tsv";
 var DENSFILE = "data_files/DensityDistribution.tsv";
+var HEATFILE = "data_files/heattest.tsv";
 
 // create charts for home tag
 function updateHomeTab(){
@@ -31,7 +32,14 @@ function updateHomeTab(){
                             '<div id="dens_distributions"></div>' +
                         '</div>' +
                     '</div>' +
-                '</div>';
+                '</div>' +
+                '<div class="row">' +
+                    '<div class="card">' +
+                        '<div class="cardInnerMargin">' +
+                            '<div id="heat_map"></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' ;
 
     // append the charts to html
     addElement("home", "div", "container-fluid", "tab_info", html);
@@ -41,6 +49,7 @@ function updateHomeTab(){
     // create the charts
     loadSize();
     loadDens();
+    loadHeat();
 }
 
 // size distribution
@@ -106,3 +115,22 @@ function loadDens(){
         create_chart(data, target, title, ylabel, xlabel);
     });
 }
+
+function loadHeat(){
+    d3.tsv(HEATFILE, function(d){
+        return {
+            size: +d.size,
+            density: +d.density,
+            value: +d.value
+        };
+    }, function(error, data){
+        if(error) throw error;
+
+        var ylabel = "Devices",
+            xlabel = "Density",
+            title  = "Node Size and Density",
+            target = "#heat_map";
+
+        create_heatmap(data, target, title, ylabel, xlabel);
+    });
+};

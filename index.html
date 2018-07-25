@@ -13,6 +13,11 @@
         <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
         <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
+        <!-- tipusearch plugin -->
+        <script src="tipuesearch/tipuesearch_content.js"></script>
+        <script src="tipuesearch/tipuesearch_set.js"></script>
+        <script src="tipuesearch/tipuesearch.min.js"></script>
+
         <!-- various css-->
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/node.css">
@@ -23,12 +28,17 @@
 
         <!-- d3 plugin -->
         <script type="text/javascript" src="js/d3.v3.min.js"></script>
+
+        <!-- functionality -->
         <script type="text/javascript" src="js/sidenav.js"></script>
         <script type="text/javascript" src="js/legends.js"></script>
+        <script type="text/javascript" src="js/heat_map.js"></script>
         <script type="text/javascript" src="js/chart.js"></script>
         <script type="text/javascript" src="js/add_remove.js"></script>
         <script type="text/javascript" src="js/home_tab.js"></script>
         <script type="text/javascript" src="js/node_tab.js"></script>
+        <script type="text/javascript" src="js/search.js"></script>
+
     </head>
 
     <body>
@@ -40,6 +50,7 @@
                     <div class="col">
                         <div class="button-area">
                             <button type="button" class="btn btn-default" onclick="openNav()">SideNav</button>
+                            <input type="text" placeholder="Search.." id="tipue_search_input">
                         </div>
                     </div>
                 </div>

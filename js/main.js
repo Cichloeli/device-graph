@@ -112,6 +112,28 @@ d3.json("graphOmahaIndexed_23_circle.json", function(error, root) {
             .style("stroke", "white")
             .style("stroke-width", 4);
     };
+
+    function highlight_searched(location){
+        for(var i = 0; i < location.length; i ++){
+            svg.select("#c"+location[i])
+                .style("stroke", "yellow")
+                .style("stroke-width", 4);
+        }
+    }
+
+    $("#tipue_search_input").on('keyup', function (e) {
+        if (e.keyCode == 13) {
+            function locations_loaded(){
+                if(LOCATIONS_FOUND == false){
+                    window.setTimeout(locations_loaded(),100);
+                }else{
+                    console.log(TIPUE_LOCATIONS);
+                    highlight_searched(TIPUE_LOCATIONS);
+                };
+            };
+            locations_loaded();
+        };
+    });
 });
 
 d3.select(self.frameElement).style("height", outerDiameter + "px");

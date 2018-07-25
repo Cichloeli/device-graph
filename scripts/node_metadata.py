@@ -1,3 +1,4 @@
+#creates json files for each node
 import json
 import os
 
@@ -13,7 +14,7 @@ def assure_path_exists(path):
 
 def openIndexFile():
     with open(INDEXPATH, 'r') as index_file:
-        json_data = json.load(index_file)
+        json_data = json.loads(index_file)
         index_file.close()
 
         return json_data

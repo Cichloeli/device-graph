@@ -164,11 +164,9 @@ function create_chart(data, target, title, ylabel, xlabel){
         var yOffset = $("#mySidenav").scrollTop(),
             xOffset = $("#mySidenav").scrollLeft();
 
-        console.log($(target).scrollLeft(),$(target).scrollTop());
         // create tooltip transition
         graph_tooltip.transition().duration(200).style("opacity", .9);
 
-        console.log(yOffset, xOffset);
         // calculate coordinates for tooltip
         var t  = d3.transform(d3.select(c).attr("transform")),
             x = t.translate[0] + parent_x + xOffset,
