@@ -142,7 +142,7 @@ function create_chart(data, target, title, ylabel, xlabel){
 
         focus.select(".y")
             .attr("transform",
-                  "translate(" + width * -1 + "," +
+                  "translate(" + width * -1.1 + "," +
                                  y(d.value) + ")")
                        .attr("x2", width + width);
 
