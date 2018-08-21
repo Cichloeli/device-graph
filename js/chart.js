@@ -1,4 +1,4 @@
-function create_chart(data, target, title, ylabel, xlabel){
+function createLineChart(data, target, title, ylabel, xlabel){
     // declare margins
     // declare width and height with padding
     var margin = {top: 50, right: 20, bottom: 50, left: 60},
@@ -183,4 +183,85 @@ function create_chart(data, target, title, ylabel, xlabel){
     function hideGraphTooltip(){
         graph_tooltip.transition().duration(200).style("opacity", 0);
     };
+};
+
+function createBarChart(data, target, title, ylabel, xlabel){
+    // declare margins
+    // declare width and height with padding
+    var margin = {top: 50, right: 20, bottom: 50, left: 60},
+        parent_width = $(target).parent().width();
+        width = parent_width - margin.left - margin.right,
+        height = screen.height/3 - margin.top - margin.bottom;
+
+    // create svg object and translate to be contained in margins
+    var svg = d3.select(target).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var graph_tooltip = d3.select(target).append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
+
+    // Set the ranges
+    var x = d3.scale.ordinal()
+        .domain(data.map(function(d) { return d.size; }))
+        .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+        .domain([0, 30000])
+        .range([height, 0]);
+
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom").ticks(5);
+
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left");
+
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.size); })
+        .attr("y", function(d) { return y(d.value);})
+        .attr("width", x.rangeBand())
+        .attr("height", function(d) { return height - y(d.value); });
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("id", "myXAxis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    // Add Y label
+    svg.append("text")
+        .style("fill", "grey")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height/2)
+        .attr("y", -margin.left/(1.2))
+        .style("text-anchor", "middle")
+        .text(ylabel);
+
+    // Add X label
+    svg.append("text")
+        .style("fill", "grey")
+        .attr("x", width/2)
+        .attr("y", height + margin.bottom/1.2)
+        .style("text-anchor", "middle")
+        .text(xlabel);
+
+    // Add title
+    svg.append("text")
+        .style("fill", "grey")
+        .attr("x", width/2)
+        .attr("y", -margin.top/1.5)
+        .style("text-anchor", "middle")
+        .html(title);
 };

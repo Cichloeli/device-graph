@@ -11,5 +11,7 @@ function addElement(parentId, elementTag, elementClass, elementId, html) {
 function removeElement(elementId) {
     // Removes an element from the document
     var element = document.getElementById(elementId);
-    element.parentNode.removeChild(element);
+    if(element != null){
+        element.parentNode.removeChild(element);
+    }
 }

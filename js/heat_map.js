@@ -1,4 +1,4 @@
-function create_heatmap(data, target, title, ylabel, xlabel){
+function createHeatMap(data, target, title, ylabel, xlabel){
     // declare margins
     // declare width and height with padding
     var margin = {top: 70, right: 20, bottom: 10, left: 60},

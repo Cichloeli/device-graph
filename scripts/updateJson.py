@@ -5,7 +5,7 @@ import json
 
 JSONPATH = '../graphOmahaIndexed.mtx_23_circle.json'
 NUCLPATH = '../graphOmahaIndexed.mtx_23_NUCLEI'
-OUTPATH  = '../graphOmahaIndexed_23_circle.json'
+OUTPATH  = '../graph_circle.json'
 
 #open json circle file for modification
 def getJsonData(file_path):

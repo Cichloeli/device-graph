@@ -1,7 +1,6 @@
 function updateNodeTab(){
     // if there are existing charts delete them
-    var old = document.getElementById("tab_info");
-    if(old != null) removeElement("tab_info");
+    removeElement("tab_info");
 
     // create chart location
     var html = '<div class="row">' +

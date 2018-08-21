@@ -1,17 +1,20 @@
 // read in distribution data and create chart
-var SIZEFILE = "data_files/SizeDistribution.tsv";
-var DENSFILE = "data_files/DensityDistribution.tsv";
-var HEATFILE = "data_files/DistributionV2.tsv";
+var SIZEFILE = "data_files/SizeDistribution.tsv",
+    DENSFILE = "data_files/DensityDistribution.tsv",
+    HEATFILE = "data_files/DistributionV2.tsv",
+    INTERFILE = "data_files/IntersectionDistributionV2.tsv";
+
+var CIRCINFO = null;
 
 // create charts for home tag
 function updateHomeTab(){
 
     // if there are existing charts delete them
-    var old = document.getElementById("tab_info");
-    if(old != null) removeElement("tab_info");
+    removeElement("tab_info");
 
-    // create chart location
-    var html =
+    var html = '';
+    if (CIRCINFO == true){
+        html = 
                 '<div class="row">' +
                     '<div class="card">' +
                         '<div class="cardInnerMargin">' +
@@ -39,17 +42,29 @@ function updateHomeTab(){
                             '<div id="heat_map"></div>' +
                         '</div>' +
                     '</div>' +
-                '</div>' ;
+                '</div>';
+        // append the charts to html
+        addElement("home", "div", "container-fluid", "tab_info", html);
 
-    // append the charts to html
-    addElement("home", "div", "container-fluid", "tab_info", html);
+        create_legend("#dens_legend");
 
-    create_legend("#dens_legend");
-
-    // create the charts
-    loadSize();
-    loadDens();
-    loadHeat();
+        // create the charts
+        loadSize();
+        loadDens();
+        loadHeat();
+    }else if(CIRCINFO == false){
+        html = 
+                '<div class="row">' +
+                    '<div class="card">' +
+                        '<div class="cardInnerMargin">' +
+                            '<div id="inter_distributions"></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+        // append the charts to html
+        addElement("home", "div", "container-fluid", "tab_info", html);
+        loadInter();
+    }
 }
 
 // size distribution
@@ -80,7 +95,7 @@ function loadSize() {
             ylabel = ylabel + " in " + zeros.toString();
         };
 
-        create_chart(data, target, title, ylabel, xlabel);
+        createLineChart(data, target, title, ylabel, xlabel);
     });
 };
 
@@ -112,9 +127,9 @@ function loadDens(){
             ylabel = ylabel + " in " + zeros.toString();
         };
 
-        create_chart(data, target, title, ylabel, xlabel);
+        createLineChart(data, target, title, ylabel, xlabel);
     });
-}
+};
 
 function loadHeat(){
     d3.tsv(HEATFILE, function(d){
@@ -131,6 +146,24 @@ function loadHeat(){
             title  = "Node Size and Density",
             target = "#heat_map";
 
-        create_heatmap(data, target, title, ylabel, xlabel);
+        createHeatMap(data, target, title, ylabel, xlabel);
     });
 };
+
+function loadInter(){
+    d3.tsv(INTERFILE, function(d){
+        return {
+            size: +d.Size,
+            value: +d.value
+        };
+    }, function(error, data){
+        if(error) throw error;
+
+        var ylabel = "Devices",
+            xlabel = "Intersection Size",
+            title  = "Intersection Distribution",
+            target = "#inter_distributions";
+
+        createBarChart(data, target, title, ylabel, xlabel);
+    });
+}
